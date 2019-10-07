@@ -1,0 +1,8 @@
+    apt-transport-https \
+    curl \
+    gnupg2 \
+    libfuse2 \
+    lsb-compat \
+    nginx \
+    python-requests \
+    supervisor \
