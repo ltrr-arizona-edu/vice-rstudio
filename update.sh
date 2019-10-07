@@ -77,7 +77,9 @@ setupbuild () {
     -e "/{{common_os_packages}}/r common_os_packages_${typetitle}" \
     -e '/{{common_os_packages}}/d' \
     Dockerfile.template > "${builddir}/Dockerfile" \
-    || errorexit "Failed to generate the Dockerfile in the ${builddir} subdirectory"
+    || errorexit "Failed to generate the Dockerfile in the ${builddir} subdirectory" \
+  cp nginx.conf.tmpl "$builddir" \
+    || errorexit "Failed to copy the nginx configuration template to the ${builddir} subdirectory"
 }
 
 updatereadme () {

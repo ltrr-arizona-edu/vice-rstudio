@@ -14,14 +14,14 @@ RUN set -e \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
     {{common_os_packages}}
-  && wget http://ftp.se.debian.org/debian/pool/main/o/openssl/${LIB_SSL_LEGACY}.deb \
+  && wget -q http://ftp.se.debian.org/debian/pool/main/o/openssl/${LIB_SSL_LEGACY}.deb \
   && dpkg -i ${LIB_SSL_LEGACY}.deb \
   && rm ${LIB_SSL_LEGACY}.deb \
-  && wget https://files.renci.org/pub/irods/releases/4.1.10/ubuntu14/${IRODS_ICOMMANDS}.deb \
+  && wget -q https://files.renci.org/pub/irods/releases/4.1.10/ubuntu14/${IRODS_ICOMMANDS}.deb \
   && dpkg -i ${IRODS_ICOMMANDS}.deb \
   && rm ${IRODS_ICOMMANDS}.deb \
   && rm -rf /var/lib/apt/lists/* \
-  && wget https://github.com/hairyhenderson/gomplate/releases/download/${GOMPLATE_VERSION}/gomplate_linux-amd64 /usr/local/bin/gomplate \
+  && wget -q https://github.com/hairyhenderson/gomplate/releases/download/${GOMPLATE_VERSION}/gomplate_linux-amd64 -O /usr/local/bin/gomplate \
   && chmod 755 /usr/local/bin/gomplate \
   && echo '#!/bin/sh \
           \ngomplate -f /nginx.conf.tmpl -o /etc/nginx/nginx.conf \
