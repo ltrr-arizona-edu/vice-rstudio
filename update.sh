@@ -71,7 +71,7 @@ setupbuild () {
   base=$4
   builddir="${variantname}/${tagname}"
   readme="${builddir}/README.md"
-  echo "# v${tagname}" > "$readme" \
+  echo "# Tagged as Version ${tagname}" > "$readme" \
     || errorexit "Can't create the minimal text file ${readme}"
   sed -e "s%{{base}}%${base}:${tagname}%g" \
     -e "/{{common_os_packages}}/r common_os_packages_${typetitle}" \
