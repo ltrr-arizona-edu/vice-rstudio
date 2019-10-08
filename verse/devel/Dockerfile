@@ -44,8 +44,9 @@ RUN set -e \
           > /etc/supervisor/conf.d/nginx.conf \
   && echo '[program:rstudio] \
           \ncommand=/usr/lib/rstudio-server/bin/rserver --server-daemonize 0' \
-          > /etc/supervisor/conf.d/rstudio.conf \
-  && /bin/bash -c /etc/cont-init.d/userconf
+          > /etc/supervisor/conf.d/rstudio.conf
+
+RUN bash /etc/cont-init.d/userconf
 
 COPY nginx.conf.tmpl /nginx.conf.tmpl
 
