@@ -4,8 +4,7 @@
 #
 FROM rocker/verse:3.6.1
 
-ENV GOMPLATE_VERSION="v2.5.0" \
-    IRODS_ICOMMANDS="irods-icommands-4.1.10-ubuntu14-x86_64" \
+ENV IRODS_ICOMMANDS="irods-icommands-4.1.10-ubuntu14-x86_64" \
     LIB_SSL_LEGACY="libssl1.0.0_1.0.1t-1+deb8u8_amd64" \
     PASSWORD="rstudio1" \
     REDIRECT_URL="http://localhost/"
@@ -28,27 +27,15 @@ RUN set -e \
   && dpkg -i ${IRODS_ICOMMANDS}.deb \
   && rm ${IRODS_ICOMMANDS}.deb \
   && rm -rf /var/lib/apt/lists/* \
-  && wget -q https://github.com/hairyhenderson/gomplate/releases/download/${GOMPLATE_VERSION}/gomplate_linux-amd64 -O /usr/local/bin/gomplate \
-  && chmod 755 /usr/local/bin/gomplate \
-  && echo '#!/bin/sh \
-          \ngomplate -f /nginx.conf.tmpl -o /etc/nginx/nginx.conf \
-          \nsupervisord -c /etc/supervisor/supervisord.conf -n' \
-          > /usr/local/bin/run.sh \
-  && chmod 755 /usr/local/bin/run.sh \
-  && echo '# Server Configuration File \
-          \n \
-          \nwww-address=127.0.0.1 \
-          \nrsession-which-r=/usr/local/bin/R' \
-          > /etc/rstudio/rserver.conf \
-  && echo '[program:nginx] \
-          \ncommand=nginx' \
-          > /etc/supervisor/conf.d/nginx.conf \
-  && echo '[program:rstudio] \
-          \ncommand=/usr/lib/rstudio-server/bin/rserver --server-daemonize 0' \
-          > /etc/supervisor/conf.d/rstudio.conf
-
-RUN bash /etc/cont-init.d/userconf
+  && echo 'www-address=127.0.0.1' >> /etc/rstudio/rserver.conf \
+  && echo '#!/usr/bin/with-contenv sh \
+          \nsed -e "s%{{REDIRECT_URL}}%${REDIRECT_URL}%" /nginx.conf.tmpl > /etc/nginx/nginx.conf' \
+          > /etc/cont-init.d/setupreverseproxy \
+  && mkdir -p /etc/services.d/nginx \
+  && echo '#!/usr/bin/with-contenv sh \
+          \nnginx' \
+          > /etc/services.d/nginx/run
 
 COPY nginx.conf.tmpl /nginx.conf.tmpl
 
-ENTRYPOINT ["/usr/local/bin/run.sh"]
+CMD ["/init"]
