@@ -16,10 +16,8 @@ RUN set -e \
     curl \
     gnupg2 \
     libfuse2 \
-    lsb-compat \
     nginx \
     python-requests \
-    supervisor \
   && wget -q http://ftp.se.debian.org/debian/pool/main/o/openssl/${LIB_SSL_LEGACY}.deb \
   && dpkg -i ${LIB_SSL_LEGACY}.deb \
   && rm ${LIB_SSL_LEGACY}.deb \

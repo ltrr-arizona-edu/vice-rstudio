@@ -4,4 +4,3 @@
     libfuse2 \
     nginx \
     python-requests \
-    supervisor \
